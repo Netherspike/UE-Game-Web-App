@@ -1,0 +1,65 @@
+stages:
+  - setup
+  - test
+
+# Define the base image with PHP and Composer for your project
+image: php:8.2
+
+# Cache for composer and npm dependencies
+cache:
+  key: "${CI_COMMIT_REF_SLUG}"
+  paths:
+    - vendor/
+    - node_modules/
+    - composer.lock
+    - package-lock.json
+
+# Variables used for the setup
+variables:
+  APP_ENV: testing
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: testing
+  DB_USERNAME: root
+  DB_PASSWORD: root
+  QUEUE_CONNECTION: database
+
+services:
+  - mysql:latest
+
+before_script:
+  # Install essential tools
+  - apt-get update && apt-get install -y curl git unzip libzip-dev libpng-dev zip libonig-dev libxml2-dev
+  # Install Composer globally
+  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  # Install Node.js and npm
+  - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+  - apt-get install -y nodejs
+  # Install dependencies
+  - composer install --prefer-dist --no-progress --no-suggest
+  - npm install
+  # Set up application-related configurations
+  - cp .env.example .env
+  - php artisan key:generate
+  - php artisan config:clear
+  - php artisan cache:clear
+  # Set up database and migrations
+  - mysql -h mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS testing;"
+  - php artisan migrate --force
+  - php artisan queue:restart
+
+setup_dependencies:
+  stage: setup
+  script:
+    - echo "Dependencies are set up."
+  tags:
+    - docker
+
+run_tests:
+  stage: test
+  script:
+    # Run PHPUnit tests
+    - vendor/bin/phpunit --testdox
+  tags:
+    - docker
