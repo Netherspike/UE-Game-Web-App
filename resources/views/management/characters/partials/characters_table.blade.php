@@ -1,7 +1,6 @@
 <table class="table mt-3">
     <thead>
     <tr>
-        <th>ID</th>
         <th>Name</th>
         <th>Class</th>
         <th>Gender</th>
@@ -12,7 +11,6 @@
     <tbody>
     @forelse ($characters as $character)
         <tr>
-            <td>{{ $character->id }}</td>
             <td>{{ $character->name }}</td>
             <td>{{ $character->class }}</td>
             <td>{{ ucfirst($character->gender) }}</td>
