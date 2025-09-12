@@ -18,6 +18,7 @@ you can now view the website in your browser http://localhost/
 login with:
 
 email: admin@game.com
+
 password: password
 
 ## Upcoming Changes
