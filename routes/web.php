@@ -26,7 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/account/edit', [AccountController::class, 'edit'])->name('account.edit');
     Route::put('/account', [AccountController::class, 'update'])->name('account.update');
     Route::delete('/account', [AccountController::class, 'destroy'])->name('account.destroy');
-    Route::resource('account.show', AccountController::class);
     Route::resource('mycharacters', CharacterController::class)
         ->parameters(['mycharacters' => 'character']);
 

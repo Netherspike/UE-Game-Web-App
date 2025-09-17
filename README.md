@@ -21,7 +21,3 @@ login with default admin account:
 email: admin@game.com
 
 password: password
-
-## Upcoming Changes
-
-Moving away from service classes as they are becoming big, move to separate actions and DTO's for type safety where nessecery.
