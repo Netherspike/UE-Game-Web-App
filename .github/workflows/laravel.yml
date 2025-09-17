@@ -15,7 +15,7 @@ jobs:
           DB_USER: sail
           DB_PASSWORD: password
           DB_PORT: 3306
-          MYSQL_ROOT_PASSWORD: password
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: testing
         ports:
           - 3306:3306
