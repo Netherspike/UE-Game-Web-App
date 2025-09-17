@@ -1,6 +1,6 @@
 <?php
 
-use App\Actions\Account\UpdateUserAction;
+use App\Actions\Account\UpdateAccountAction;
 use App\Dtos\UserDto;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,7 +20,7 @@ describe('Update user action tests', function() {
             email: fake()->unique()->safeEmail()
         );
 
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         expect($result)->toBeTrue();
         $this->assertDatabaseHas('users', [
@@ -41,7 +41,7 @@ describe('Update user action tests', function() {
             password: $newPassword
         );
 
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         expect($result)->toBeTrue();
 
@@ -62,7 +62,7 @@ describe('Update user action tests', function() {
             password: 'newpassword'
         );
 
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         expect($result)->toBeFalse();
         expect($this->user->fresh()->password)->toBe($this->user->password);
@@ -77,7 +77,7 @@ describe('Update user action tests', function() {
             email: $originalEmail
         );
 
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         expect($result)->toBeTrue();
         expect($this->user->fresh()->name)->toBe($newName);
@@ -93,7 +93,7 @@ describe('Update user action tests', function() {
             email: $newEmail
         );
 
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         expect($result)->toBeTrue();
         expect($this->user->fresh()->name)->toBe($originalName);
@@ -108,7 +108,7 @@ describe('Update user action tests', function() {
             email: fake()->unique()->safeEmail()
         );
 
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         expect($result)->toBeTrue();
         expect($this->user->fresh()->password)->toBe($originalHash);

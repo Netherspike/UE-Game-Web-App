@@ -8,7 +8,7 @@ use App\Dtos\UserDto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class UpdateUserAction
+class UpdateAccountAction
 {
     public function handle(UserDto $userDto): bool
     {

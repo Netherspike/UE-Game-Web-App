@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Account;
 
 use App\Actions\Account\DeleteAccountAction;
-use App\Actions\Account\UpdateUserAction;
+use App\Actions\Account\UpdateAccountAction;
 use App\Dtos\UserDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\UserUpdateRequest;
@@ -28,7 +28,7 @@ class AccountController extends Controller
     public function update(UserUpdateRequest $request): RedirectResponse
     {
         $userDto = UserDto::from($request->validated());
-        $result = app(UpdateUserAction::class)->handle($userDto);
+        $result = app(UpdateAccountAction::class)->handle($userDto);
 
         if (!$result) {
             // We can safely assume false response indicates this error as the `UserUpdateRequest` will throw other failures
