@@ -17,6 +17,7 @@ jobs:
           DB_PORT: 3306
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: testing
+          DB_DATABASE: testing
         ports:
           - 3306:3306
     runs-on: ubuntu-latest
