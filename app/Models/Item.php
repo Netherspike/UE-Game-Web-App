@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\ItemTypeEnum;
@@ -41,11 +43,6 @@ class Item extends Model
         ];
     }
 
-    /**
-     * The model's default values for attributes.
-     *
-     * Defaults for all JSON fields are set to empty JSON objects (or arrays).
-     */
     protected $attributes = [
         'general' => '{}',
         'stats' => '{}',

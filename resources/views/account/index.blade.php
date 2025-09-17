@@ -6,10 +6,6 @@
     <div class="container mt-5">
         <h2>My Account</h2>
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <!-- User Details -->
         <ul class="list-group mb-5">
             <li class="list-group-item"><strong>Name:</strong> {{ $user->name }}</li>
@@ -22,7 +18,7 @@
         <form method="POST" action="{{ route('account.destroy') }}" class="mt-3">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account and associated characters?')">Delete Account</button>
         </form>
     </div>
 @endsection

@@ -20,10 +20,7 @@ class CharacterController extends Controller
 
     public function index(): View
     {
-        // Fetch all characters for the authenticated user via User's relationship
-        $characters = Auth::user()->characters;
-
-        return view('characters.index', compact('characters'));
+        return view('characters.index', ['characters' => Auth::user()->characters]);
     }
 
     public function create(): View

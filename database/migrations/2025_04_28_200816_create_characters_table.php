@@ -18,8 +18,8 @@ return new class extends Migration
                 ->constrained('users')
                 ->onDelete('cascade');
             $table->string('name')->unique();
-            $table->string('skeletal_mesh_path')->default("/Script/Engine.SkeletalMesh\'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny\'");
-            $table->string('animation_class')->default("/Script/Engine.AnimBlueprint\'/Game/Characters/Mannequins/Animations/ABP_Manny.ABP_Manny\'");
+            $table->string('skeletal_mesh_path')->default("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'");
+            $table->string('animation_class')->default("/Script/Engine.AnimBlueprint'/Game/Characters/Mannequins/Animations/ABP_Manny.ABP_Manny'");
             $table->json('materials');
             $table->enum('class', array_map(fn ($item) => $item->value, CharacterClassEnum::cases()));
             $table->enum('gender', ['male', 'female']);

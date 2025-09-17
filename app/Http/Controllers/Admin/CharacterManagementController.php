@@ -26,6 +26,7 @@ class CharacterManagementController extends Controller
 
         $characters = $this->characterService->getPaginatedCharacters($search);
 
+        // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('management.characters.partials.characters_table', compact('characters'))->render()

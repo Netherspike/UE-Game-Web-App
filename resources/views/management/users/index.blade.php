@@ -13,10 +13,6 @@
             <a href="{{ route('users.create') }}" class="btn btn-primary">Create New User</a>
         </div>
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <!-- Search Form -->
         <div class="row mb-4">
             <div class="col-md-8">

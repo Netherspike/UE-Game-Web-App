@@ -9,13 +9,14 @@ Ran with Docker Desktop
 1. copy .env.example to .env
 2. composer install && bash ./vendor/laravel/sail/bin/sail up
 3. docker exec -it <container_id> bash
-   1. php artisan mig:f --seed
-   2. php artisan test
+   1. php artisan key:generate
+   2. php artisan mig:f --seed
+   3. php artisan test
 
 
 you can now view the website in your browser http://localhost/
 
-login with:
+login with default admin account:
 
 email: admin@game.com
 

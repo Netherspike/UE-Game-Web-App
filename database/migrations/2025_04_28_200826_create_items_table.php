@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type', array_map(fn ($item) => $item->value, ItemTypeEnum::cases()));
 
             $table->integer('value')->nullable()->default(0);
+            $table->boolean('active')->default(true);
             $table->string('name');
             $table->string('display_name');
             $table->string('description');

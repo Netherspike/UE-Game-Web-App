@@ -15,16 +15,17 @@ use Illuminate\View\View;
 
 class ItemManagementController extends Controller
 {
-    public function __construct(readonly private ItemService $itemService)
-    {
-
-    }
+    public function __construct(
+        readonly private ItemService $itemService
+    ) {}
 
     public function index(Request $request): View|JsonResponse
     {
+        //TODO: custom request to validate search string
         $search = $request->query('search');
         $items = $this->itemService->getPaginatedItems($search);
 
+        // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('management.items.partials.items_table', compact('items'))->render()

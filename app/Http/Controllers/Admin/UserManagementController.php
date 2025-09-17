@@ -19,10 +19,12 @@ class UserManagementController extends Controller
 
     public function index(Request $request): View|JsonResponse
     {
+        // TODO: create custom request to validate search string
         $search = $request->query('search');
 
         $users = $this->userService->getPaginatedUsers($search);
 
+        // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('management.users.partials.users_table', compact('users'))->render()

@@ -15,10 +15,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         //Create Admin user
-        User::factory()->create([
+        $adminUser = User::factory()->create([
             'email' => 'admin@game.com',
             'is_admin' => 1
         ]);
+
+        //Create between 1 to 5 characters for the admin user
+        Character::factory(rand(1, 5))->create(['user_id' => $adminUser->id]);
 
         // Create 10 users and for each user, create between 1 to 5 characters.
         User::factory(10)->create()->each(function ($user) {

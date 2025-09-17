@@ -16,7 +16,7 @@ class CharacterStoreRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
-            'class' => ['required', Rule::in(array_column(CharacterClassEnum::cases(), 'value'))],
+            'class' => ['required', Rule::enum(CharacterClassEnum::class)],
             'gender' => 'required|string|in:male,female',
             'skeletal_mesh_path' => 'nullable|string|max:255',
         ];

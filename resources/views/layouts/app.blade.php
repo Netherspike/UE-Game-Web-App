@@ -17,10 +17,14 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <!-- Include Navbar -->
             @include('components.navbar')
 
             <main>
+                @if (session('success'))
+                    <div class="container mt-5">
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    </div>
+                @endif
                 @yield('content')
             </main>
         </div>

@@ -8,10 +8,6 @@
             <a href="{{ route('mycharacters.create') }}" class="btn btn-primary">Create New Character</a>
         </div>
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         @if ($characters->isNotEmpty())
             <table class="table mt-3">
                 <thead>
