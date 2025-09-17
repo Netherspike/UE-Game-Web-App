@@ -25,12 +25,12 @@ jobs:
         DB_DATABASE: testing
         DB_USERNAME: sail
         DB_PASSWORD: password
-    - name: Cache config
-      run: php artisan config:cache
     - name: Install Dependencies
       run: composer update && composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
       run: php artisan key:generate --env=testing
+    - name: Cache config
+      run: php artisan config:cache
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
     - name: Create Database
