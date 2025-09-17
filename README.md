@@ -9,8 +9,8 @@ Ran with Docker Desktop
 1. copy .env.example to .env
 2. composer install && bash ./vendor/laravel/sail/bin/sail up
 3. docker exec -it <container_id> bash
-   1. php artisan key:generate
-   2. php artisan mig:f --seed
+   1. php artisan key:generate && php artisan key:generate --env=testing
+   2. php artisan mig:f --seed && php artisan mig:f --env=testing
    3. php artisan test
 
 
