@@ -14,7 +14,7 @@ class MyCharacterUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:30|unique:characters',
+            'name' => 'sometimes|string|max:30|unique:characters,name,' . $this->route('character')->id,
             'skeletal_mesh_path' => 'nullable|string|max:255',
             'class' => ['sometimes', Rule::enum(CharacterClassEnum::class)],
             'gender' => 'sometimes|string|in:male,female',

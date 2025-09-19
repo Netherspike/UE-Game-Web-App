@@ -16,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class CharacterController extends Controller
 {
@@ -59,9 +60,11 @@ class CharacterController extends Controller
 
     public function update(MyCharacterUpdateRequest $request, Character $character): RedirectResponse
     {
+        Log::info('here');
         Gate::authorize('access_character', $character);
 
         $characterDto = CharacterDto::from(['user_id' => Auth::id(), ...$request->validated()]);
+        Log::info(array_filter($characterDto->toArray()));
         $this->updateCharacterAction->handle($character, $characterDto);
 
         return redirect()->route('mycharacters.index')->with('success', 'Character updated successfully.');

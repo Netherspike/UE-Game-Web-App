@@ -22,8 +22,6 @@ class Item extends Model
         'description',
         'thumbnail_path',
         'static_mesh_path',
-        'created_at',
-        'updated_at',
         'general',
         'stats',
         'attributes',

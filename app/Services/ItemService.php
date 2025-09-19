@@ -10,26 +10,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ItemService
 {
-    public function createItem(array $data): Item
-    {
-        return Item::query()->create($data);
-    }
-
     public function getAllItems(): Collection
     {
         return Item::all();
-    }
-
-    public function updateItem(Item $item, array $data): Item
-    {
-        $item->update($data);
-        $item->refresh();
-        return $item;
-    }
-
-    public function deleteItem(Item $item): void
-    {
-        $item->delete();
     }
 
     public function getPaginatedItems(string|null $search): LengthAwarePaginator

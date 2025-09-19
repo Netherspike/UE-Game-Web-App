@@ -22,6 +22,7 @@
             <div class="mb-3">
                 <label for="gender" class="form-label">Character Gender</label>
                 <select id="gender" name="gender" class="form-select">
+                    <option value="{{$character->gender}}" selected>{{ucfirst($character->gender)}}</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                 </select>

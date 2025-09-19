@@ -41,6 +41,7 @@ class AccountController extends Controller
                 'current_password' => 'The current password is incorrect.'
             ]);
         }
+
         return redirect()->route('account.show')->with('success', 'Account updated successfully.');
     }
 

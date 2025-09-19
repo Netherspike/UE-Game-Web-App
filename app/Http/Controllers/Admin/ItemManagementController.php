@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Item\CreateItemAction;
+use App\Actions\Item\DeleteItemAction;
+use App\Actions\Item\UpdateItemAction;
+use App\Dtos\ItemDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Item\ItemStoreRequest;
 use App\Http\Requests\Item\ItemUpdateRequest;
@@ -16,14 +20,16 @@ use Illuminate\View\View;
 class ItemManagementController extends Controller
 {
     public function __construct(
-        readonly private ItemService $itemService
+        protected CreateItemAction $createItemAction,
+        protected UpdateItemAction $updateItemAction,
+        protected DeleteItemAction $deleteItemAction,
     ) {}
 
     public function index(Request $request): View|JsonResponse
     {
         //TODO: custom request to validate search string
         $search = $request->query('search');
-        $items = $this->itemService->getPaginatedItems($search);
+        $items = app(ItemService::class)->getPaginatedItems($search);
 
         // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {
@@ -42,7 +48,9 @@ class ItemManagementController extends Controller
 
     public function store(ItemStoreRequest $request): RedirectResponse
     {
-        $this->itemService->createItem($request->validated());
+        $itemDto = ItemDto::from($request->validated());
+        $this->createItemAction->handle($itemDto);
+
         return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
@@ -58,13 +66,16 @@ class ItemManagementController extends Controller
 
     public function update(ItemUpdateRequest $request, Item $item): RedirectResponse
     {
-        $this->itemService->updateItem($item, $request->validated());
+        $itemDto = ItemDto::from($request->validated());
+        $this->updateItemAction->handle($item, $itemDto);
+
         return redirect()->route('items.index')->with('success', 'Item updated successfully.');
     }
 
     public function destroy(Item $item): RedirectResponse
     {
-        $this->itemService->deleteItem($item);
+        $this->deleteItemAction->handle($item);
+
         return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }
 }
