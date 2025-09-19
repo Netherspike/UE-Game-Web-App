@@ -12,7 +12,7 @@
                 <label for="type" class="form-label">Type</label>
                 <select id="type" name="type" class="form-select @error('type') is-invalid @enderror" required>
                     @foreach(\App\Enums\ItemTypeEnum::cases() as $type)
-                        <option value="{{ $type->value }}" {{ old('type', $item->type) == $type->value ? 'selected' : '' }}>
+                        <option value="{{ $type->value }}" {{ old('type', $item->type) == $type ? 'selected' : '' }}>
                             {{ $type->value }}
                         </option>
                     @endforeach
