@@ -1,6 +1,6 @@
 ## Notes
 
-This app will allow you to manage characters and items in your game and provide token based authentication for the game.
+Laravel 12 application to manage game data and provide token based authentication via sanctum.
 
 ## Installation
 
