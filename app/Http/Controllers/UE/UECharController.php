@@ -6,15 +6,15 @@ namespace App\Http\Controllers\UE;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class UECharController extends Controller
 {
     /**
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        return response()->json(Auth::user()->characters);
+        return response()->json($request->user()->characters);
     }
 }
