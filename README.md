@@ -1,6 +1,6 @@
 ## Notes
 
-This app will allow you to manage characters and items in your game
+This app will allow you to manage characters and items in your game and provide authentication for the game to call.
 
 ## Installation
 
@@ -16,7 +16,10 @@ Ran with Docker Desktop
 
 you can now view the website in your browser http://localhost/
 
-login with default admin account:
+## API Auto documentation - locked to local env only
+http://localhost/docs/api
+
+## default admin account after seeding
 
 email: admin@game.com
 

@@ -36,7 +36,7 @@ class AccountController extends Controller
         $result = $this->updateAccountAction->handle($userDto);
 
         if (!$result) {
-            // We can safely assume false response indicates this error as the `UserUpdateRequest` will throw other failures
+            // We know false response indicates this error as the `UserUpdateRequest` validates everything else
             return back()->withErrors([
                 'current_password' => 'The current password is incorrect.'
             ]);
@@ -46,7 +46,7 @@ class AccountController extends Controller
 
     public function destroy(): RedirectResponse
     {
-        $this->deleteAccountAction->handle();
+        $this->deleteAccountAction->handle(Auth::user());
 
         return redirect('/')->with('success', 'Your account and associated characters have been deleted.');
     }

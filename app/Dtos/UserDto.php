@@ -14,14 +14,4 @@ class UserDto extends Data
         public readonly ?string $currentPassword = null,
         public readonly ?string $password = null
     ) {}
-
-    public function toArray(): array
-    {
-        return array_filter([
-            'name' => $this->name,
-            'email' => $this->email,
-            'current_password' => $this->currentPassword,
-            'password' => $this->password,
-        ]);
-    }
 }

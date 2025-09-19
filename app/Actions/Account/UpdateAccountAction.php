@@ -22,10 +22,9 @@ class UpdateAccountAction
             $user->save();
         }
 
-        $user->update([
-            'name' => $userDto->name,
-            'email' => $userDto->email
-        ]);
+        $user->update(
+            array_filter($userDto->toArray())
+        );
         $user->refresh();
 
         return true;

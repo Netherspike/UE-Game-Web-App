@@ -22,10 +22,11 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware('auth')->group(function () {
-    // Separate route for account deletion to avoid conflicts with resource routes
-    Route::delete('account', [AccountController::class, 'destroy'])->name('account.destroy');
-    Route::singleton('account', AccountController::class);
 
+    // Use of singleton to create routes without id parameters as there is only for authenticated user
+    Route::singleton('account', AccountController::class)->destroyable();
+
+    // Change 'mycharacters' to 'character' to match method signatures
     Route::resource('mycharacters', CharacterController::class)
         ->parameters(['mycharacters' => 'character']);
 

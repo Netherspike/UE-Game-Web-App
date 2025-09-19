@@ -24,6 +24,10 @@
                     <div class="container mt-5">
                         <div class="alert alert-success">{{ session('success') }}</div>
                     </div>
+                @elseif (session('error'))
+                    <div class="container mt-5">
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    </div>
                 @endif
                 @yield('content')
             </main>

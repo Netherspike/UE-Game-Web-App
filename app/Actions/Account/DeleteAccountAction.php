@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Actions\Account;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class DeleteAccountAction
 {
-    public function handle(): void
+    public function handle(User $user): bool
     {
-        //Must logout first before deleting the account
-        $user = Auth::user();
-        Auth::logout();
-        $user->deleteOrFail();
+        if (Auth::id() === $user->id) {
+            Auth::logout();
+        }
+
+        return $user->deleteOrFail();
     }
 }

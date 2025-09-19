@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Account;
 
+use App\Actions\Character\CreateCharacterAction;
+use App\Actions\Character\DeleteCharacterAction;
+use App\Actions\Character\UpdateCharacterAction;
+use App\Dtos\CharacterDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Character\MyCharacterStoreRequest;
+use App\Http\Requests\Character\MyCharacterUpdateRequest;
 use App\Models\Character;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use App\Services\CharacterService;
+use Illuminate\Support\Facades\Gate;
 
 class CharacterController extends Controller
 {
     public function __construct(
-        readonly private CharacterService $characterService
+        protected CreateCharacterAction $createCharacterAction,
+        protected UpdateCharacterAction $updateCharacterAction,
+        protected DeleteCharacterAction $deleteCharacterAction,
     ) {}
 
     public function index(): View
@@ -30,38 +37,41 @@ class CharacterController extends Controller
 
     public function store(MyCharacterStoreRequest $request): RedirectResponse
     {
-        $this->characterService->createCharacter(['user_id' => Auth::user()->id, ...$request->validated()]);
+        $characterDto = CharacterDto::from(['user_id' => Auth::id(), ...$request->validated()]);
+        $this->createCharacterAction->handle($characterDto);
+
         return redirect()->route('mycharacters.index')->with('success', 'Character created successfully.');
     }
 
     public function show(Character $character): View
     {
-        //TODO: use gate/policy
-        $this->characterService->authorizeCharacter($character);
+        Gate::authorize('access_character', $character);
+
         return view('characters.show', compact('character'));
     }
 
     public function edit(Character $character): View
     {
-        //TODO: use gate/policy
-        $this->characterService->authorizeCharacter($character);
+        Gate::authorize('access_character', $character);
 
         return view('characters.edit', compact('character'));
     }
 
-    public function update(MyCharacterStoreRequest $request, Character $character): RedirectResponse
+    public function update(MyCharacterUpdateRequest $request, Character $character): RedirectResponse
     {
-        //TODO: use gate/policy
-        $this->characterService->authorizeCharacter($character);
-        $this->characterService->updateCharacter($character, $request->validated());
+        Gate::authorize('access_character', $character);
+
+        $characterDto = CharacterDto::from(['user_id' => Auth::id(), ...$request->validated()]);
+        $this->updateCharacterAction->handle($character, $characterDto);
+
         return redirect()->route('mycharacters.index')->with('success', 'Character updated successfully.');
     }
 
     public function destroy(Character $character): RedirectResponse
     {
-        //TODO: use gate/policy
-        $this->characterService->authorizeCharacter($character);
-        $this->characterService->deleteCharacter($character);
+        Gate::authorize('access_character', $character);
+
+        $this->deleteCharacterAction->handle($character);
 
         return redirect()->route('mycharacters.index')->with('success', 'Character deleted successfully.');
     }

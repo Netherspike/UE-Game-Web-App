@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Character;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\CharacterClassEnum;
+use Illuminate\Validation\Rule;
 
 class CharacterUpdateRequest extends FormRequest
 {
@@ -12,8 +14,10 @@ class CharacterUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:255',
+            'name' => 'sometimes|string|max:255',
             'skeletal_mesh_path' => 'nullable|string|max:255',
+            'gender' => 'sometimes|string|in:male,female',
+            'class' => ['sometimes', Rule::enum(CharacterClassEnum::class)]
         ];
     }
 
