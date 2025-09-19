@@ -11,17 +11,17 @@ beforeEach(function () {
 
 describe('account management', function () {
     test('guest cannot access account page', function () {
-        $response = $this->get(route('account.index'));
+        $response = $this->get(route('account.show'));
 
         $response->assertRedirect(route('login'));
     });
 
     test('authenticated user can view account page', function () {
         $response = $this->actingAs($this->user)
-            ->get(route('account.index'));
+            ->get(route('account.show'));
 
         $response->assertOk()
-            ->assertViewIs('account.index')
+            ->assertViewIs('account.show')
             ->assertViewHas('user', $this->user);
     });
 
@@ -41,7 +41,7 @@ describe('account management', function () {
                 'email' => 'updated@example.com',
             ]);
 
-        $response->assertRedirect(route('account.index'));
+        $response->assertRedirect(route('account.show'));
 
         $this->user->refresh();
         expect($this->user->name)->toBe('Updated Name')

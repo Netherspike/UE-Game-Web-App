@@ -15,9 +15,14 @@ use Illuminate\View\View;
 
 class AccountController extends Controller
 {
-    public function index(): View
+    public function __construct(
+        protected UpdateAccountAction $updateAccountAction,
+        protected DeleteAccountAction $deleteAccountAction
+    ) {}
+
+    public function show(): View
     {
-        return view('account.index', ['user' => Auth::user()]);
+        return view('account.show', ['user' => Auth::user()]);
     }
 
     public function edit(): View
@@ -28,7 +33,7 @@ class AccountController extends Controller
     public function update(UserUpdateRequest $request): RedirectResponse
     {
         $userDto = UserDto::from($request->validated());
-        $result = app(UpdateAccountAction::class)->handle($userDto);
+        $result = $this->updateAccountAction->handle($userDto);
 
         if (!$result) {
             // We can safely assume false response indicates this error as the `UserUpdateRequest` will throw other failures
@@ -36,12 +41,12 @@ class AccountController extends Controller
                 'current_password' => 'The current password is incorrect.'
             ]);
         }
-        return redirect()->route('account.index')->with('success', 'Account updated successfully.');
+        return redirect()->route('account.show')->with('success', 'Account updated successfully.');
     }
 
     public function destroy(): RedirectResponse
     {
-        app(DeleteAccountAction::class)->handle();
+        $this->deleteAccountAction->handle();
 
         return redirect('/')->with('success', 'Your account and associated characters have been deleted.');
     }

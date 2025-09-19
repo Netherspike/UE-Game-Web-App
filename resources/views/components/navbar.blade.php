@@ -24,7 +24,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <!-- Nested Dropdown Links -->
-                            <a class="dropdown-item" href="{{ route('account.index') }}">
+                            <a class="dropdown-item" href="{{ route('account.show') }}">
                                 Settings
                             </a>
                             <a class="dropdown-item" href="{{ route('mycharacters.index') }}">

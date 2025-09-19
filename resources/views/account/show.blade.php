@@ -15,9 +15,10 @@
         </ul>
 
         <a href="{{ route('account.edit') }}" class="btn btn-dark mt-3">Edit Account</a>
-        <form method="POST" action="{{ route('account.destroy') }}" class="mt-3">
-            @csrf
+        <form action="{{ route('account.destroy') }}" class="mt-3">
             @method('DELETE')
+            @csrf
+
             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account and associated characters?')">Delete Account</button>
         </form>
     </div>

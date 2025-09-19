@@ -50,7 +50,7 @@
             </div>
 
             <button type="submit" class="btn btn-dark">Update Account</button>
-            <a href="{{ route('account.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('account.show') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 @endsection

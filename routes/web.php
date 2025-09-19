@@ -22,10 +22,10 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/account', [AccountController::class, 'index'])->name('account.index');
-    Route::get('/account/edit', [AccountController::class, 'edit'])->name('account.edit');
-    Route::put('/account', [AccountController::class, 'update'])->name('account.update');
-    Route::delete('/account', [AccountController::class, 'destroy'])->name('account.destroy');
+    // Separate route for account deletion to avoid conflicts with resource routes
+    Route::delete('account', [AccountController::class, 'destroy'])->name('account.destroy');
+    Route::singleton('account', AccountController::class);
+
     Route::resource('mycharacters', CharacterController::class)
         ->parameters(['mycharacters' => 'character']);
 
