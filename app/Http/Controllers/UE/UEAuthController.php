@@ -15,12 +15,9 @@ class UEAuthController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::query()->where('email', $request->email)->first();
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(['error' => 'Unauthorized'], 401);
-            /*throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);*/
         }
         $token = $user->createToken('ue-token-' . $user->id)->plainTextToken;
         return response()->json(['user_id' => $user->id, 'token' => $token], 200);

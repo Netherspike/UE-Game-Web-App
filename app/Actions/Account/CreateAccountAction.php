@@ -12,7 +12,7 @@ class CreateAccountAction
 {
     public function handle(UserDto $userDto): User
     {
-        $user = User::make([
+        $user = User::query()->make([
             'name' => $userDto->name,
             'email' => $userDto->email,
         ]);

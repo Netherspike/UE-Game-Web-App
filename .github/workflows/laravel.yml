@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  ci-tests:
+  ci-pipeline:
     runs-on: ubuntu-latest
 
     services:
@@ -43,6 +43,9 @@ jobs:
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+
+    - name: PHPStan Analysis
+      run: vendor/bin/phpstan analyse app/ database/ routes/ --level=1
 
     - name: Execute tests
       env:

@@ -1,10 +1,10 @@
 ## Notes
 
-This app will allow you to manage characters and items in your game and provide authentication for the game to call.
+This app will allow you to manage characters and items in your game and provide token based authentication for the game.
 
 ## Installation
 
-Ran with Docker Desktop
+Run with Docker Desktop for local testing with your UE5 game.
 
 1. copy .env.example to .env
 2. composer install && bash ./vendor/laravel/sail/bin/sail up

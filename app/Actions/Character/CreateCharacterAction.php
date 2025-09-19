@@ -11,6 +11,6 @@ class CreateCharacterAction
 {
     public function handle(CharacterDto $characterDto): void
     {
-        Character::create($characterDto->toArray());
+        Character::query()->create($characterDto->toArray());
     }
 }
