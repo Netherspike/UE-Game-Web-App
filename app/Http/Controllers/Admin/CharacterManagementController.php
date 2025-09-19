@@ -4,27 +4,32 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Character\CreateCharacterAction;
+use App\Actions\Character\DeleteCharacterAction;
+use App\Actions\Character\GetCharactersAction;
+use App\Actions\Character\UpdateCharacterAction;
+use App\Dtos\CharacterDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Character\CharacterStoreRequest;
 use App\Http\Requests\Character\CharacterUpdateRequest;
+use App\Http\Requests\IndexSearchRequest;
 use App\Models\Character;
-use App\Services\CharacterService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class CharacterManagementController extends Controller
 {
     public function __construct(
-        readonly private CharacterService $characterService
+        protected CreateCharacterAction $createCharacterAction,
+        protected UpdateCharacterAction $updateCharacterAction,
+        protected DeleteCharacterAction $deleteCharacterAction,
+        protected GetCharactersAction $getCharactersAction
     ) {}
 
-    public function index(Request $request): View|JsonResponse
+    public function index(IndexSearchRequest $request): View|JsonResponse
     {
-        $search = $request->input('search');
-
-        $characters = $this->characterService->getPaginatedCharacters($search);
+        $characters = $this->getCharactersAction->handle($request->query('search'));
 
         // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {
@@ -33,7 +38,7 @@ class CharacterManagementController extends Controller
             ]);
         }
 
-        return view('management.characters.index', compact('characters', 'search'));
+        return view('management.characters.index', compact('characters'));
 
     }
 
@@ -44,7 +49,9 @@ class CharacterManagementController extends Controller
 
     public function store(CharacterStoreRequest $request): RedirectResponse
     {
-        $this->characterService->createCharacter($request->validated());
+        $characterDto = CharacterDto::from($request->validated());
+        $this->createCharacterAction->handle($characterDto);
+
         return redirect()->route('characters.index')->with('success', 'Character created successfully.');
     }
 
@@ -60,13 +67,15 @@ class CharacterManagementController extends Controller
 
     public function update(CharacterUpdateRequest $request, Character $character): RedirectResponse
     {
-        $this->characterService->updateCharacter($character, $request->validated());
+        $characterDto = CharacterDto::from($request->validated());
+        $this->updateCharacterAction->handle($character, $characterDto);
+
         return redirect()->route('characters.index')->with('success', 'Character updated successfully.');
     }
 
     public function destroy(Character $character): RedirectResponse
     {
-        $this->characterService->deleteCharacter($character);
+        $this->deleteCharacterAction->handle($character);
         return redirect()->route('characters.index')->with('success', 'Character deleted successfully.');
     }
 }

@@ -20,8 +20,8 @@ return new class extends Migration
 
             $table->integer('value')->nullable()->default(0);
             $table->boolean('active')->default(true);
-            $table->string('name');
-            $table->string('display_name');
+            $table->string('name')->unique();
+            $table->string('display_name')->unique();
             $table->string('description');
             $table->string('thumbnail_path')->nullable()->default(null); //TODO: default this to an image
             $table->string('static_mesh_path');

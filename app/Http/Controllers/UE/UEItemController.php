@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\UE;
 
+use App\Actions\Item\CreateItemAction;
+use App\Actions\Item\DeleteItemAction;
+use App\Actions\Item\UpdateItemAction;
+use App\Dtos\ItemDto;
 use App\Http\Controllers\Controller;
-use App\Services\ItemService;
 use App\Http\Requests\Item\ItemStoreRequest;
 use App\Http\Requests\Item\ItemUpdateRequest;
 use Illuminate\Http\JsonResponse;
 use App\Models\Item;
 
+//TODO: add error responses in JSON for UE5 to handle
 class UEItemController extends Controller
 {
     public function __construct(
-        private readonly ItemService $itemService
+        protected CreateItemAction $createItemAction,
+        protected UpdateItemAction $updateItemAction,
+        protected DeleteItemAction $deleteItemAction,
     ) {}
 
     public function index(): JsonResponse
     {
         //TODO: chunk/yeild this data so php doesnt run out of memory
-        $items = $this->itemService->getAllItems();
-        return response()->json($items, 200);
+        return response()->json(Item::all(), 200);
     }
 
     public function show(Item $item): JsonResponse
@@ -31,19 +36,21 @@ class UEItemController extends Controller
 
     public function store(ItemStoreRequest $request): JsonResponse
     {
-        $item = $this->itemService->createItem($request->validated());
+        $itemDto = ItemDto::from($request->validated());
+        $item = $this->createItemAction->handle($itemDto);
         return response()->json(['message' => 'Item created successfully!', 'item' => $item], 201);
     }
 
     public function update(ItemUpdateRequest $request, Item $item): JsonResponse
     {
-        $updatedItem = $this->itemService->updateItem($item, $request->validated());
+        $itemDto = ItemDto::from($request->validated());
+        $updatedItem = $this->updateItemAction->handle($item, $itemDto);
         return response()->json(['message' => 'Item updated successfully!', 'item' => $updatedItem], 200);
     }
 
     public function destroy(Item $item): JsonResponse
     {
-        $this->itemService->deleteItem($item);
+        $this->deleteItemAction->handle($item);
         return response()->json(['message' => 'Item deleted successfully!'], 200);
     }
 }

@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Actions\Item\CreateItemAction;
 use App\Actions\Item\DeleteItemAction;
+use App\Actions\Item\GetItemsAction;
 use App\Actions\Item\UpdateItemAction;
 use App\Dtos\ItemDto;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\IndexSearchRequest;
 use App\Http\Requests\Item\ItemStoreRequest;
 use App\Http\Requests\Item\ItemUpdateRequest;
 use App\Models\Item;
-use App\Services\ItemService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ItemManagementController extends Controller
@@ -23,13 +23,12 @@ class ItemManagementController extends Controller
         protected CreateItemAction $createItemAction,
         protected UpdateItemAction $updateItemAction,
         protected DeleteItemAction $deleteItemAction,
+        protected GetItemsAction $getItemsAction
     ) {}
 
-    public function index(Request $request): View|JsonResponse
+    public function index(IndexSearchRequest $request): View|JsonResponse
     {
-        //TODO: custom request to validate search string
-        $search = $request->query('search');
-        $items = app(ItemService::class)->getPaginatedItems($search);
+        $items = $this->getItemsAction->handle($request->query('search'));
 
         // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Account\CreateAccountAction;
+use App\Actions\Account\DeleteAccountAction;
+use App\Actions\Account\UpdateAccountAction;
+use App\Dtos\UserDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Account\UserStoreRequest;
 use App\Models\User;
-use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,14 +18,26 @@ use Illuminate\View\View;
 
 class UserManagementController extends Controller
 {
-    public function __construct(private UserService $userService) {}
+    public function __construct(
+        protected CreateAccountAction $createAccountAction,
+        protected UpdateAccountAction $updateAccountAction,
+        protected DeleteAccountAction $deleteAccountAction,
+    ) {}
 
     public function index(Request $request): View|JsonResponse
     {
-        // TODO: create custom request to validate search string
+        // TODO: create custom request to validate search string and move to action
         $search = $request->query('search');
 
-        $users = $this->userService->getPaginatedUsers($search);
+        $query = User::query();
+
+        if (!empty($search)) {
+            $query->where('name', 'LIKE', $search . '%')
+                ->orWhere('email', 'LIKE', $search . '%');
+        }
+
+        $users = $query->orderBy('id', 'desc')
+            ->paginate(config('pagination.per_page', 10));
 
         // If the request was through AJAX assume user is searching so we refresh the HTML table
         if ($request->ajax()) {
@@ -42,7 +57,8 @@ class UserManagementController extends Controller
 
     public function store(UserStoreRequest $request): RedirectResponse
     {
-        $this->userService->createUser($request->validated());
+        $userDto = UserDto::from($request->validated());
+        $this->createAccountAction->handle($userDto);
 
         return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
@@ -62,20 +78,15 @@ class UserManagementController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        $data = $request->only(['name', 'email']);
-
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
-        }
-
-        $this->userService->updateUser($user, $data);
+        $userDto = UserDto::from($request->all());
+        $this->updateAccountAction->handle($userDto, $user);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully!');
     }
 
     public function destroy(User $user): RedirectResponse
     {
-        $this->userService->deleteUser($user);
+        $this->deleteAccountAction->handle($user);
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\ItemTypeEnum;
-use App\Enums\WeaponTypeEnum;
 use App\Models\Item;
 use App\Models\Character;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -39,7 +38,7 @@ describe('Item Model', function () {
             'name' => 'New Item',
             'type' => ItemTypeEnum::MISC,
             'description' => 'A new test item',
-            'display_name' => 'New Item Display',
+            'display_name' => 'New Item Display Test',
             'static_mesh_path' => '/path/to/mesh',
             'thumbnail_path' => '/path/to/thumbnail',
             'value' => 100,

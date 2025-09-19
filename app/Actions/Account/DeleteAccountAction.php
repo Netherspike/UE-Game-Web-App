@@ -12,6 +12,10 @@ class DeleteAccountAction
     public function handle(User $user): bool
     {
         if (Auth::id() === $user->id) {
+            if ($user->is_admin) {
+                // Admins cannot delete their own account
+                return false;
+            }
             Auth::logout();
         }
 
